@@ -14,11 +14,11 @@ function [model H o z] = for_kin(d,thet,a,alph)
         
         H(:,:,i) = t;
     end
-
-    model =  eye(4);
-for i = 1:length(thet);
-    model = model*H(:,:,i);
-    o(:,:,i) = [model(1,4);model(2,4);model(3,4)];
-    z(:,:,i) = [model(1,3);model(2,3);model(3,3)];
-
+    mod =  eye(4);
+for i = 1:length(thet); 
+    mod = mod*H(:,:,i);
+    o(:,:,i) = [mod(1,4);mod(2,4);mod(3,4)];
+    z(:,:,i) = [mod(1,3);mod(2,3);mod(3,3)];
+    model(:,:,i) = mod;
+end
 end

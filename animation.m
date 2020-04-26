@@ -43,10 +43,6 @@ body.Joint = joint;
 addBody(robot, body, 'link2');
 
 
-t = (0:0.2:10)'; % Time
-
-points = center + radius*[cos(theta) sin(theta) zeros(size(theta))];
-
 q0 = homeConfiguration(robot);
 ndof = length(q0);
 qs = zeros(count, ndof);

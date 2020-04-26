@@ -2,10 +2,10 @@
 
 pb = [2;.5;0];
 thetf = [pi/2; pi/2];
-atragains = [10; 10 ];
+atragains = [1; 1 ];
 po = 1;
 repgains = [0; 1];
-kgains = [.1; .1 ];
+kgains = [1; .5 ];
 
 
 %the distance between the previous x-axis and the current x-axis, along the previous z-axis.
@@ -27,8 +27,9 @@ o1 = zeros(3,1,2);
 [mod1 H1 o1 z1]= for_kin(d,thet,a,alph);
 [mod2 H2 o2 z2]= for_kin(d,thetf,a,alph);
 iterat = 0
-%run the simulation until both points are at the 
-while thet(1) ~= thetf(1) && thet(2) ~= thetf(2)
+%run the simulation 200 times
+for j = 1:300
+%while thet(1) ~= thetf(1) && thet(2) ~= thetf(2)
 iterat = iterat+1
 [mod1 H1 o1 z1]= for_kin(d,thet,a,alph);
 fa = zeros(3,1,2);
@@ -42,11 +43,18 @@ for i = 1:length(thet)
    fsum(:,i) = fa(:,:,i)+frep(:,:,i);
 end
 
-jv = calc_jacob(mod1)
+jv = calc_jacob(mod1);
 for i =1:length(thet)
     tor(i) = dot(transpose(jv(:,i)),fsum(:,i));
 end
-thet = transpose(tor).*kgains
-
-
+thet = transpose(tor).*kgains;
+rad2deg(thet)
+% for i = 1:length(thet)
+%     if thet(i) > 2*pi
+%         thet(i) = thet(i)-2*pi
+%     end
+%     if thet(i)<-2*pi
+%         thet(i) = thet(i)+2*pi
+%     end
+% end
 end

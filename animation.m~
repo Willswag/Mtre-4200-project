@@ -4,10 +4,10 @@
 
 pb = [2;.5;0];
 thetf = [pi/2; pi/2];
-atragains = [.75; .1 ];
+atragains = [1.1; .1 ];
 po = 1;
-repgains = [0; .1];
-kgains = [.1; .1 ];
+repgains = [0; 1.1];
+kgains = [1.1; .1 ];
 
 
 %the distance between the previous x-axis and the current x-axis, along the previous z-axis.
@@ -90,7 +90,7 @@ hold on
 axis([-5 5 -5 5])
 
 
-framesPerSecond = 144;
+framesPerSecond = 60;
 r = rateControl(framesPerSecond);
 for i = 1:count
     show(robot,qs(i,:)','PreservePlot',false);

@@ -2,7 +2,7 @@
 
 pb = [2;.5;0];
 thetf = [pi/2; pi/2];
-atragains = [1; 1 ];
+atragains = [1; 2 ];
 po = 1;
 repgains = [0; 1];
 kgains = [1; .5 ];
@@ -28,7 +28,7 @@ o1 = zeros(3,1,2);
 [mod2 H2 o2 z2]= for_kin(d,thetf,a,alph);
 iterat = 0
 %run the simulation 200 times
-for j = 1:300
+for j = 1:200
 %while thet(1) ~= thetf(1) && thet(2) ~= thetf(2)
 iterat = iterat+1
 [mod1 H1 o1 z1]= for_kin(d,thet,a,alph);

@@ -31,7 +31,7 @@ tform = H(:,:,1); % User defined
 setFixedTransform(jnt1,tform);
 body1.Joint = jnt1;
 
-robot = rigidBodyTree;
+robot = rigidBodyTree('DataFormat','column','MaxNumbodies',7);
 
 addBody(robot,body1,'base')
 
@@ -47,33 +47,79 @@ body3 = rigidBody('body3');
 body4 = rigidBody('body4');
 jnt3 = rigidBodyJoint('jnt3','revolute');
 jnt4 = rigidBodyJoint('jnt4','revolute');
-tform3 = H(:,:,3)
-tform4 = H(:,:,4)
+tform3 = H(:,:,3);
+tform4 = H(:,:,4);
 setFixedTransform(jnt3,tform3);
 setFixedTransform(jnt4,tform4);
 jnt3.HomePosition = 0; % User defined
 body3.Joint = jnt3;
-body4.Joint = jnt4
+body4.Joint = jnt4;
 addBody(robot,body3,'body2'); % Add body3 to body2
 addBody(robot,body4,'body3'); % Add body4 to body3
 
 
-body3 = rigidBody('body5');
-body4 = rigidBody('body6');
-jnt3 = rigidBodyJoint('jnt5','prismatic');
-jnt4 = rigidBodyJoint('jnt6','revolute');
-tform5 = trvec2tform([0.6, -0.1, 0])*eul2tform([-pi/2, 0, 0]); % User defined
-tform6 = trvec2tform([1, 0, 0]); % User defined
+body5 = rigidBody('body5');
+body6 = rigidBody('body6');
+jnt5 = rigidBodyJoint('jnt5','prismatic');
+jnt6 = rigidBodyJoint('jnt6','revolute');
+tform5 = H(:,:,5);
+tform6 = H(:,:,6); % User defined
 setFixedTransform(jnt5,tform5);
 setFixedTransform(jnt6,tform6);
-jnt3.HomePosition = 0; % User defined
-body5.Joint = jnt5
-body6.Joint = jnt6
+jnt5.HomePosition = 0; % User defined
+jnt6.HomePosition = 0; % User defined
+body5.Joint = jnt5;
+body6.Joint = jnt6;
 addBody(robot,body5,'body4'); % Add body3 to body2
 addBody(robot,body6,'body5'); % Add body4 to body3
 
 
 bodyEndEffector = rigidBody('endeffector');
-tform7 = trvec2tform([0.5, 0, 0]); % User defined
-setFixedTransform(bodyEndEffector.Joint,tform5);
+tform7 = H(:,:,7);
+setFixedTransform(bodyEndEffector.Joint,tform7);
 addBody(robot,bodyEndEffector,'body6');
+
+t = (0:0.2:10)'; % Time
+count = length(t);
+center = [3 2 0];
+radius = 2;
+theta = t*(2*pi/t(end));
+points = center + radius*[cos(theta) sin(theta) zeros(size(theta))];
+
+q0 = homeConfiguration(robot);
+ndof = length(q0);
+qs = zeros(count, ndof);
+
+ik = inverseKinematics('RigidBodyTree', robot);
+weights = [0, 0, 0, 1, 1, 0];
+endEffector = 'endeffector';
+
+
+qInitial = q0; % Use home configuration as the initial guess
+for i = 1:count
+    % Solve for the configuration satisfying the desired end effector
+    % position
+    point = points(i,:);
+    qSol = ik(endEffector,trvec2tform(point),weights,qInitial);
+    % Store the configuration
+    qs(i,:) = qSol;
+    % Start from prior solution
+    qInitial = qSol;
+end
+
+figure(1)
+show(robot,qs(1,:)');
+view(2)
+ax = gca;
+ax.Projection = 'orthographic';
+hold on
+plot(points(:,1),points(:,2),'k')
+axis([-7 7 -7 7])
+
+framesPerSecond = 15;
+r = rateControl(framesPerSecond);
+for i = 1:count
+    show(robot,qs(i,:)','PreservePlot',false);
+    drawnow
+    waitfor(r);
+end

@@ -79,12 +79,13 @@ tform7 = H(:,:,7);
 setFixedTransform(bodyEndEffector.Joint,tform7);
 addBody(robot,bodyEndEffector,'body6');
 
-t = (0:0.2:10)'; % Time
+t = (0:0.2:25)'; % Time
 count = length(t);
-center = [4 2 0];
-radius = 1;
-theta = t*(2*pi/t(end));
-points = center + radius*[cos(theta) sin(theta) zeros(size(theta))];
+% center = [4 2 0];
+% radius = 1;
+% theta = t*(2*pi/t(end));
+% points = center + radius*[cos(theta) sin(theta) zeros(size(theta))];
+points =[sin(t),2*cos(t),.25*t];
 
 q0 = homeConfiguration(robot);
 ndof = length(q0);
@@ -113,7 +114,7 @@ view(2)
 ax = gca;
 ax.Projection = 'orthographic';
 hold on
-plot(points(:,1),points(:,2),'k')
+plot3(points(:,1),points(:,2),points(:,3),'k')
 axis([-7 7 -7 7])
 
 framesPerSecond = 15;

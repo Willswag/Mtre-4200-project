@@ -47,13 +47,13 @@ body3 = rigidBody('body3');
 body4 = rigidBody('body4');
 jnt3 = rigidBodyJoint('jnt3','revolute');
 jnt4 = rigidBodyJoint('jnt4','revolute');
-tform3 = H(:,:,3);
-tform4 = H(:,:,4);
+tform3 = H(:,:,3)
+tform4 = H(:,:,4)
 setFixedTransform(jnt3,tform3);
 setFixedTransform(jnt4,tform4);
 jnt3.HomePosition = 0; % User defined
 body3.Joint = jnt3;
-body4.Joint = jnt4;
+body4.Joint = jnt4
 addBody(robot,body3,'body2'); % Add body3 to body2
 addBody(robot,body4,'body3'); % Add body4 to body3
 
@@ -62,19 +62,18 @@ body3 = rigidBody('body5');
 body4 = rigidBody('body6');
 jnt3 = rigidBodyJoint('jnt5','prismatic');
 jnt4 = rigidBodyJoint('jnt6','revolute');
-tform5 = H(:,:,5);
-tform6 = H(:,:,6); % User defined
+tform5 = trvec2tform([0.6, -0.1, 0])*eul2tform([-pi/2, 0, 0]); % User defined
+tform6 = trvec2tform([1, 0, 0]); % User defined
 setFixedTransform(jnt5,tform5);
 setFixedTransform(jnt6,tform6);
-jnt5.HomePosition = 0; % User defined
-jnt6.HomePosition = 0; % User defined
-body5.Joint = jnt5;
-body6.Joint = jnt6;
+jnt3.HomePosition = 0; % User defined
+body5.Joint = jnt5
+body6.Joint = jnt6
 addBody(robot,body5,'body4'); % Add body3 to body2
 addBody(robot,body6,'body5'); % Add body4 to body3
 
 
 bodyEndEffector = rigidBody('endeffector');
-tform7 = H(:,:,7);
-setFixedTransform(bodyEndEffector.Joint,tform7);
+tform7 = trvec2tform([0.5, 0, 0]); % User defined
+setFixedTransform(bodyEndEffector.Joint,tform5);
 addBody(robot,bodyEndEffector,'body6');

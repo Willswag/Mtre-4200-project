@@ -8,13 +8,13 @@ pb = [2;.5;0];
 %final joint angle
 thetf = [pi/2 pi/2];
 %atraction gainz
-atragains = [1; 1 ];
+atragains = [10; 100 ];
 %size of point to avoid
 po = 1;
 %repulsion gains
-repgains = [0; .5];
+repgains = [0; 10];
 %rotational gains
-kgains = [.3; .03 ];
+kgains = [.001; .1 ];
 
 %the distance between the previous x-axis and the current x-axis, along the previous z-axis.
 d = [ 0 0 ];
@@ -84,22 +84,27 @@ rad2deg(thet)
     % Store the configuration
     qs(j,:) = thet;
     % Start from prior solution
- 
+ data1(:,j) = mod1(1:2,4,2)
 end
+figure(1)
+x = 1:count
+gox = -1*ones(size(x));
+goy = ones(size(x));
+plot(x,data1,x,gox,x,goy)
 
-figure 
-show(robot,qs(1,:)');
-view(2)
-ax = gca;
-ax.Projection = 'orthographic';
-hold on
-axis([-5 5 -5 5])
-
-
-framesPerSecond = 60;
-r = rateControl(framesPerSecond);
-for i = 1:count
-    show(robot,qs(i,:)','PreservePlot',false);
-    drawnow
-    waitfor(r);
-end
+% figure(2)
+% show(robot,qs(1,:)');
+% view(2)
+% ax = gca;
+% ax.Projection = 'orthographic';
+% hold on
+% axis([-5 5 -5 5])
+% 
+% 
+% framesPerSecond = 60;
+% r = rateControl(framesPerSecond);
+% for i = 1:count
+%     show(robot,qs(i,:)','PreservePlot',false);
+%     drawnow
+%     waitfor(r);
+% end

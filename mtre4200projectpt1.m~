@@ -6,7 +6,7 @@
 % calculates the h matrix for a robot using DH params
 %thanks to robotiq with their website post
 %https://blog.robotiq.com/how-to-calculate-a-robots-forward-kinematics-in-5-easy-steps
-types = [,0,0,0, 1, 0, 0, 1, 0]
+types = [0, 1, 0, 0, 0,]
 %control comands for the arm
 coms = [0, 0, 0, 0, 0, 0]; 
 
@@ -84,6 +84,6 @@ h = cell(6,1);
 eepose(:,i) = mod(1:3,4,7);
 end
 
-jac = jac6(mod,types);
+
 
 
